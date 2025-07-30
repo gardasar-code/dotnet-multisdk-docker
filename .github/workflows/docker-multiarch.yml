@@ -35,3 +35,15 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository }}.v6min:latest
             ghcr.io/${{ github.repository }}.v6min:${{ github.sha }}
+
+      - name: Build and push (v5 amd64 Dockerfile)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./v5.Dockerfile
+          platforms: linux/amd64
+          push: true
+          provenance: false
+          tags: |
+            ghcr.io/${{ github.repository }}.v5min.amd64:latest
+            ghcr.io/${{ github.repository }}.v5min.amd64:${{ github.sha }}
