@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS sdk6
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS sdk8
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS sdk9
-FROM mcr.microsoft.com/dotnet/sdk:10.0-preview
+FROM mcr.microsoft.com/dotnet/sdk:10.0
 
 COPY --from=sdk6 /usr/share/dotnet /usr/share/dotnet
 COPY --from=sdk8 /usr/share/dotnet /usr/share/dotnet

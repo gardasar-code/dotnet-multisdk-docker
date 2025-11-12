@@ -1,0 +1,38 @@
+root = true
+
+[*]
+indent_style = space                    # Использовать пробелы вместо табов
+indent_size = 4                         # Размер отступа — 4 пробела
+tab_width = 4                           # Ширина табуляции для IDE
+end_of_line = lf                        # Формат перевода строки — Unix LF
+insert_final_newline = true             # Добавлять пустую строку в конец файла
+trim_trailing_whitespace = true         # Удалять пробелы в конце строк
+charset = utf-8                         # Кодировка — UTF-8 без BOM
+max_line_length = 120                   # Максимальная длина строки
+
+# --- Проектные XML файлы (.csproj, .vbproj и т.п.) ---
+[*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,nativeproj,locproj}]
+indent_size = 2                         # Для проектных файлов отступ — 2 пробела
+
+# --- Конфигурационные XML файлы (.props, .targets, .config и т.п.) ---
+[*.{props,targets,config,nuspec}]
+indent_size = 2                         # Для конфигов — 2 пробела
+
+# --- XML ресурсы, правила, стили ---
+[*.{resx,ruleset,slnx,stylecop,xml}]
+indent_size = 2                         # Для ресурсов и схем — 2 пробела
+
+# --- JSON / YAML файлы ---
+[*.{json,yaml,yml}]
+indent_size = 2                         # Отступ 2 пробела
+
+# --- Shell и Batch скрипты ---
+[*.sh]
+end_of_line = lf                        # Для shell — LF
+[*.{cmd,bat}]
+end_of_line = crlf                      # Для Windows bat/cmd — CRLF
+
+# --- Markdown ---
+[*.md]
+max_line_length = off                   # Не ограничивать длину строки в документации
+trim_trailing_whitespace = false        # Разрешить trailing spaces (для переноса строк)
