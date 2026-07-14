@@ -3,9 +3,14 @@ name: Build & Push Multi-Arch Docker Image
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 env:
-  IMAGE_NAME: dotnet-multisdk
+  REGISTRY: ghcr.io
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
   build-and-push:
@@ -20,30 +25,55 @@ jobs:
       - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # Semver-теги (1.2.3, 1.2, latest) из имени релиза + short sha.
+      - name: Docker metadata (default image)
+        id: meta_default
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}.v6min
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest
+            type=sha
+
       - name: Build and push multi-arch (default Dockerfile)
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           provenance: false
+          tags: ${{ steps.meta_default.outputs.tags }}
+          labels: ${{ steps.meta_default.outputs.labels }}
+          cache-from: type=gha,scope=v6min
+          cache-to: type=gha,mode=max,scope=v6min
+
+      - name: Docker metadata (v5 image)
+        id: meta_v5
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}.v5min.amd64
           tags: |
-            ghcr.io/${{ github.repository }}.v6min:latest
-            ghcr.io/${{ github.repository }}.v6min:${{ github.sha }}
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest
+            type=sha
 
       - name: Build and push (v5 amd64 Dockerfile)
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./v5.Dockerfile
           platforms: linux/amd64
           push: true
           provenance: false
-          tags: |
-            ghcr.io/${{ github.repository }}.v5min.amd64:latest
-            ghcr.io/${{ github.repository }}.v5min.amd64:${{ github.sha }}
+          tags: ${{ steps.meta_v5.outputs.tags }}
+          labels: ${{ steps.meta_v5.outputs.labels }}
+          cache-from: type=gha,scope=v5min
+          cache-to: type=gha,mode=max,scope=v5min
