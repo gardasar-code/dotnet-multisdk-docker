@@ -6,10 +6,10 @@
 
 | Образ | Dockerfile | Версии SDK | Платформы |
 |-------|-----------|------------|-----------|
-| `*.v6min` | `Dockerfile` | 6.0, 8.0, 9.0, 10.0 | linux/amd64, linux/arm64 |
-| `*.v5min.amd64` | `v5.Dockerfile` | 5.0, 6.0, 8.0, 9.0, 10.0 | linux/amd64 |
+| `*.v6min` | `Dockerfile` | 6.0, 8.0, 9.0, 10.0, 11.0 | linux/amd64, linux/arm64 |
+| `*.v5min.amd64` | `v5.Dockerfile` | 5.0, 6.0, 8.0, 9.0, 10.0, 11.0 | linux/amd64 |
 
-Базовый слой — .NET 10.0 (его host/fxr запускает и младшие рантаймы). В каждый образ включены **и SDK, и shared-рантаймы** каждой версии, поэтому проекты можно не только собирать, но и запускать.
+Базовый слой — .NET 11.0 (его host/fxr запускает и младшие рантаймы). В каждый образ включены **и SDK, и shared-рантаймы** каждой версии, поэтому проекты можно не только собирать, но и запускать.
 
 > ⚠️ .NET 5.0 и 6.0 сняты с поддержки, .NET 9.0 — STS. Образы предназначены для миграции/аудита legacy-проектов, а не для production-нагрузки.
 
@@ -25,7 +25,7 @@ docker run --rm dotnet-multisdk:latest dotnet --list-runtimes
 ### Сборка образа
 
 ```bash
-# Основной образ (6/8/9/10), multi-arch
+# Основной образ (6/8/9/10/11), multi-arch
 docker buildx build --platform linux/amd64 -t dotnet-multisdk:latest --load .
 docker buildx build --platform linux/arm64 -t dotnet-multisdk:latest --load .
 
